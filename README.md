@@ -109,7 +109,71 @@ Perform inference using trained models:
 python inference.py
 ```
 
-## Acknowledgments
-- Pre-trained models and architectures: PyTorch torchvision library.
-- Dataset: CIFAR-10.
+# Saliency Map Generation using MobileNetV2
 
+This experiment demonstrates the generation of **saliency maps** for a pretrained **MobileNetV2** model using masked image techniques. The goal is to identify regions in an image that the model relies on for its classification predictions. Saliency maps provide a visual understanding of how convolutional neural networks (CNNs) focus on different parts of an image.
+
+---
+
+## 1. **Experiment Overview**
+The experiment aims to:
+- Highlight the most critical regions in an image that influence a model's prediction.
+- Understand how convolutional layers focus on specific regions.
+- Demonstrate the impact of masking on classification probabilities.
+
+---
+
+## 2. **Procedure**
+
+### a. **Model and Preprocessing**
+- **Model**: A pretrained **MobileNetV2** model from PyTorch's torchvision library is used.
+- **Preprocessing**:
+  - Input images are resized to 224x224.
+  - Images are normalized using ImageNet's standard mean and standard deviation.
+  - Converted into tensors for inference.
+
+### b. **Mask Application**
+- A black square mask of size `30x30` pixels is applied to the image.
+- The mask slides across the entire image in both horizontal and vertical directions, moving with a stride of 20 pixels.
+- Each mask position generates a new masked version of the image.
+
+### c. **Saliency Mapping**
+- Each masked image is passed through the model.
+- The output probabilities for the correct class are recorded for every mask position.
+- The recorded probabilities are reshaped into a 2D saliency map (heatmap) representing the importance of each region to the model's prediction.
+
+### d. **Visualization**
+- The saliency map is visualized as a heatmap overlaid on the original image.
+- The saliency map highlights the areas where the mask caused the highest drop in classification probability, indicating the regions critical for the model's predictions.
+
+---
+
+## 3. **Results**
+
+### a. **Input Image**
+The experiment uses a sample image of a French horn and musicians as input. Below is the original input image:
+
+![French Horn Input Image](./plots/french_horn_original_pic.png)
+
+### b. **Saliency Map**
+The generated saliency map clearly highlights the object's region (e.g., the French horn) as critical for classification. It is visualized below:
+
+![Saliency Map](./plots/sailancy_map.png)
+
+---
+
+## 4. **Observations**
+- **Focus**: The saliency map effectively highlights the most critical areas, such as the French horn, demonstrating the model's focus during classification.
+- **Impact of Masking**: When the mask overlaps significant regions of the image, the model's prediction probabilities for the correct class drop significantly.
+- **Visualization**: Saliency maps provide an intuitive understanding of how the model perceives and prioritizes different regions of the image.
+
+---
+
+## 5. **Conclusion**
+The experiment showcases the importance of saliency maps in explaining the behavior of deep learning models. It also demonstrates how masking techniques can help identify critical regions in images for model predictions.
+
+---
+
+### Acknowledgments
+- **Pretrained Model**: MobileNetV2 from PyTorch's torchvision library.
+- **Dataset**: Sample image demonstrating saliency mapping.
